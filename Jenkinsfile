@@ -10,7 +10,7 @@ node {
     stage 'Build and test'
     sh 'mvn -Dmaven.test.failure.ignore clean verify'
     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-
+    step($class: 'CucumberTestResultArchiver', testResults: 'glob')
     stage 'Deploy to nexus'
     // sh 'mvn deploy'
 }
