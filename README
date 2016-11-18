@@ -1,0 +1,3 @@
+Run:
+
+java - jar rabobank-statement-processor-1.0.jar <directory with statement files>
