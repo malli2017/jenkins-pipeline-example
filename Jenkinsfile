@@ -12,7 +12,7 @@ node {
     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
 
     stage 'Deploy to nexus'
-    sh 'mvn deploy'
+    // sh 'mvn deploy'
 }
 
 def version() {
