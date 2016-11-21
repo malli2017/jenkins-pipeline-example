@@ -10,10 +10,20 @@ node 'master', {
         sh 'mvn clean install -DskipTests'
     }
 
+    parallel (
+            "Unit tests" : {
+                sh 'mvn -Punit-tests test'
+                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+            },
+            "Feature tests" : {
+                sh 'mvn -Pintegration-tests test'
+                step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+            }
+    )
+
     stage 'Test', {
-        sh 'mvn test'
-        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-        step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+
+
     }
     stage 'Deploy to nexus', {
         // sh 'mvn deploy'
