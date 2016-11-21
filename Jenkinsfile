@@ -2,7 +2,7 @@
 
 echo 'Hello from Pipeline'
 //echo version()
-//env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
+env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 
 stage 'Build', {
     node {
@@ -11,30 +11,29 @@ stage 'Build', {
     }
 }
 
-stage 'Tests', {
-    node {
-        parallel(
-                unittests: {
-                    stage('Unit tests') {
-                        sh 'mvn -Punit-tests test'
-                        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-                    }
-                },
-                featuretests: {
-                    stage('Feature tests') {
-                        sh 'mvn -Pintegration-tests test'
-                        step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
-                    }
+parallel(
+        unittests: {
+            stage('Unit tests') {
+                node {
+                    sh 'mvn -Punit-tests test'
+                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
                 }
-        )
-    }
-}
-
+            }
+        },
+        featuretests: {
+            stage('Feature tests') {
+                node {
+                    sh 'mvn -Pintegration-tests test'
+                    step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+                }
+            }
+        }
+)
 
 stage 'Deploy to nexus', {
-//    timeout(time: 5, unit: 'DAYS') {
-//        input message: 'Approve deployment?'
-//    }
+    timeout(time: 5, unit: 'DAYS') {
+        input message: 'Approve deployment?'
+    }
     node {
 // sh 'mvn deploy'\
         echo 'Deployed!'

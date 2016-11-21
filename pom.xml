@@ -45,7 +45,6 @@
                 </pluginManagement>
             </build>
         </profile>
-
         <profile>
             <id>integration-tests</id>
             <build>
