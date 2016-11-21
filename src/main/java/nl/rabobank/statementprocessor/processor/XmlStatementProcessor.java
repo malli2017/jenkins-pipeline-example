@@ -36,6 +36,6 @@ public class XmlStatementProcessor implements StatementProcessor {
             log.error(String.format("Error while reading XML file. File: %s", file.getName()));
         }
 
-        return Collections.emptyList();
+        return Collections.emptyList()
     }
 }
