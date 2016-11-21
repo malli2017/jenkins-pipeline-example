@@ -14,12 +14,14 @@ node 'master', {
             "Unit tests": {
                 stage 'Unit tests', {
                     sh 'mvn -Punit-tests test'
+                    sleep(10000)
                     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
                 }
             },
             "Feature tests": {
                 stage 'Feature tests', {
                     sh 'mvn -Pintegration-tests test'
+                    sleep(150000)
                     step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
                 }
             }
