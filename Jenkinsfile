@@ -28,10 +28,11 @@ parallel(
         }
 )
 
+
+stage 'Deploy to nexus'
 timeout(time:5, unit:'DAYS') {
     input message:'Approve deployment?'
 }
-stage 'Deploy to nexus'
 node {
 // sh 'mvn deploy'\
     echo 'Deployed! :)'
