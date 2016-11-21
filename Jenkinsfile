@@ -1,10 +1,8 @@
 #!/usr/bin/env groovy
-node 'master', {
-    echo 'Hello from Pipeline'
-    echo version()
-    env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
-}
 
+echo 'Hello from Pipeline'
+echo version()
+env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 
 stage 'Build', {
     node {
