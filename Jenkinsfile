@@ -10,23 +10,26 @@ node 'master', {
         sh 'mvn clean install -DskipTests'
     }
 
-    stage 'Test', {
-        parallel(
-                "Unit tests": {
+    parallel(
+            "Unit tests": {
+                stage 'Unit tests', {
                     sh 'mvn -Punit-tests test'
                     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-                },
-                "Feature tests": {
+                }
+            },
+            "Feature tests": {
+                stage 'Feature tests', {
                     sh 'mvn -Pintegration-tests test'
                     step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
                 }
-        )
-    }
-
-    stage 'Deploy to nexus', {
-        // sh 'mvn deploy'
-    }
+            }
+    )
 }
+
+stage 'Deploy to nexus', {
+    // sh 'mvn deploy'
+}
+
 
 
 def version() {
