@@ -11,33 +11,32 @@ stage 'Build', {
     }
 }
 
-
-parallel('Unit tests': {
-    stage 'Unit tests', {
-        node {
-            sh 'mvn -Punit-tests test'
-            step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-        }
-    }
-},
-        'Future tests': {
-            stage 'Feature tests', {
-                node {
+node {
+    parallel(
+            unittests: {
+                stage 'Unit tests', {
+                    sh 'mvn -Punit-tests test'
+                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                }
+            },
+            featuretests: {
+                stage 'Feature tests', {
                     sh 'mvn -Pintegration-tests test'
                     step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
                 }
             }
-        }
-)
-
-
-stage 'Deploy to nexus'
-timeout(time: 5, unit: 'DAYS') {
-    input message: 'Approve deployment?'
+    )
 }
-node {
+
+
+stage 'Deploy to nexus', {
+    timeout(time: 5, unit: 'DAYS') {
+        input message: 'Approve deployment?'
+    }
+    node {
 // sh 'mvn deploy'\
-    echo 'Deployed! :)'
+        echo 'Deployed! :)'
+    }
 }
 
 
