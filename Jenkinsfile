@@ -10,21 +10,19 @@ node 'master', {
         sh 'mvn clean install -DskipTests'
     }
 
-    parallel (
-            "Unit tests" : {
-                sh 'mvn -Punit-tests test'
-                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-            },
-            "Feature tests" : {
-                sh 'mvn -Pintegration-tests test'
-                step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
-            }
-    )
-
     stage 'Test', {
-
-
+        parallel(
+                "Unit tests": {
+                    sh 'mvn -Punit-tests test'
+                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                },
+                "Feature tests": {
+                    sh 'mvn -Pintegration-tests test'
+                    step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+                }
+        )
     }
+
     stage 'Deploy to nexus', {
         // sh 'mvn deploy'
     }
@@ -32,6 +30,6 @@ node 'master', {
 
 
 def version() {
-  def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-  matcher ? matcher[0][1] : null
+    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+    matcher ? matcher[0][1] : null
 }
