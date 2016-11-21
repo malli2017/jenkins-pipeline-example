@@ -10,28 +10,25 @@ node {
     sh 'mvn clean install -DskipTests'
 }
 
-
-parallel(
-        "Unit tests": {
-            stage 'Unit tests'
-            node {
-                sh 'mvn -Punit-tests test'
-                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-            }
-        },
-        "Feature tests": {
-            stage 'Feature tests'
-            node {
-                sh 'mvn -Pintegration-tests test'
-                step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
-            }
-        }
-)
+parallel 'Unit tests' : {
+    stage 'Unit tests'
+    node {
+        sh 'mvn -Punit-tests test'
+        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+    }
+},
+'Future tests' : {
+    stage 'Feature tests'
+    node {
+        sh 'mvn -Pintegration-tests test'
+        step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+    }
+}
 
 
 stage 'Deploy to nexus'
-timeout(time:5, unit:'DAYS') {
-    input message:'Approve deployment?'
+timeout(time: 5, unit: 'DAYS') {
+    input message: 'Approve deployment?'
 }
 node {
 // sh 'mvn deploy'\
