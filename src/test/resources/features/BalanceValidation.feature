@@ -40,7 +40,7 @@ Feature: Validation of mutations
       | "100"        | "-25"    | "75"       |
       | "5.50"       | "-0.51"  | "4.99"     |
       | "2"          | "-2.01"  | "-0.01"    |
-      | "-2"         | "-1.99"  | "-3.98"    |
+      | "-2"         | "-1.99"  | "-3.99"    |
 
   Scenario Outline: Validation of incorrect deduction
     Given I have a start balance of <startbalance> euro
