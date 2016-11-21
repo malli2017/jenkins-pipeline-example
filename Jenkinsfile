@@ -11,21 +11,23 @@ stage 'Build', {
     }
 }
 
-node {
-    parallel(
-            unittests: {
-                stage('Unit tests') {
-                    sh 'mvn -Punit-tests test'
-                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+stage 'Tests', {
+    node {
+        parallel(
+                unittests: {
+                    stage('Unit tests') {
+                        sh 'mvn -Punit-tests test'
+                        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                    }
+                },
+                featuretests: {
+                    stage('Feature tests') {
+                        sh 'mvn -Pintegration-tests test'
+                        step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+                    }
                 }
-            },
-            featuretests: {
-                stage('Feature tests') {
-                    sh 'mvn -Pintegration-tests test'
-                    step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
-                }
-            }
-    )
+        )
+    }
 }
 
 
