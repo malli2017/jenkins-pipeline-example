@@ -4,10 +4,11 @@ echo 'Hello from Pipeline'
 echo version()
 env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 
-stage 'Build'
-node {
-    checkout scm
-    sh 'mvn clean install -DskipTests'
+stage 'Build', {
+    node {
+        checkout scm
+        sh 'mvn clean install -DskipTests'
+    }
 }
 
 
