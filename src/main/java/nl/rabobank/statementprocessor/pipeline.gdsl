@@ -1,3 +1,4 @@
+package nl.rabobank.statementprocessor
 //The global script scope
 def ctx = context(scope: scriptScope())
 contributor(ctx) {

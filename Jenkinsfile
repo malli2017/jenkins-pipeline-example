@@ -1,19 +1,22 @@
 #!/usr/bin/env groovy
-node {
+node 'dsds', {
     echo 'Hello from Pipeline'
     echo version()
     env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 
     checkout scm
 
-    stage 'Build and test'
-    sh 'mvn -Dmaven.test.failure.ignore clean verify'
-    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-    step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+    stage 'Build and test', {
+        sh 'mvn -Dmaven.test.failure.ignore clean verify'
+        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+        step($class: 'CucumberTestResultArchiver', testResults: 'target/cucumber-report.json')
+    }
+    stage 'Deploy to nexus', {
+        // sh 'mvn deploy'
+    }
 
-    stage 'Deploy to nexus'
-    // sh 'mvn deploy'
 }
+
 
 def version() {
   def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
