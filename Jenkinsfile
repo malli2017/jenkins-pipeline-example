@@ -1,4 +1,4 @@
-//#!/usr/bin/env groovy
+#!/usr/bin/env groovy
 //echo 'Hello from Pipeline'
 //env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 //
@@ -32,7 +32,7 @@
 //    echo 'Deployed!'
 //}
 
-#!/usr/bin/env groovy
+//#!/usr/bin/env groovy
 node 'master', {
     echo 'Hello from Pipeline'
     echo version()
