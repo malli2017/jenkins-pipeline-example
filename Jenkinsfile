@@ -6,12 +6,12 @@ node 'master', {
 }
 
 
-stage 'Build', {
-    node {
-        checkout scm
-        sh 'mvn clean install -DskipTests'
-    }
+stage 'Build'
+node {
+    checkout scm
+    sh 'mvn clean install -DskipTests'
 }
+
 
 node {
     parallel(
@@ -32,10 +32,9 @@ node {
     )
 }
 
-stage 'Deploy to nexus', {
-    node {
-        // sh 'mvn deploy'
-    }
+stage 'Deploy to nexus'
+node {
+    // sh 'mvn deploy'
 }
 
 
