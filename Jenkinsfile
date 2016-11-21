@@ -30,9 +30,9 @@ node {
 
 
 stage 'Deploy to nexus', {
-    timeout(time: 5, unit: 'DAYS') {
-        input message: 'Approve deployment?'
-    }
+//    timeout(time: 5, unit: 'DAYS') {
+//        input message: 'Approve deployment?'
+//    }
     node {
 // sh 'mvn deploy'\
         echo 'Deployed! :)'
