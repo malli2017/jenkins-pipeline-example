@@ -3,13 +3,16 @@ node 'master', {
     echo 'Hello from Pipeline'
     echo version()
     env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
+}
+checkout scm
 
-    checkout scm
-
-    stage 'Build', {
+stage 'Build', {
+    node {
         sh 'mvn clean install -DskipTests'
     }
+}
 
+node {
     parallel(
             "Unit tests": {
                 stage 'Unit tests', {
@@ -26,14 +29,13 @@ node 'master', {
                 }
             }
     )
+}
 
-    stage 'Deploy to nexus', {
+stage 'Deploy to nexus', {
+    node {
         // sh 'mvn deploy'
     }
 }
-
-
-
 
 
 def version() {
