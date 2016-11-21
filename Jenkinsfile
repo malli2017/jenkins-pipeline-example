@@ -4,10 +4,11 @@ node 'master', {
     echo version()
     env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 }
-checkout scm
+
 
 stage 'Build', {
     node {
+        checkout scm
         sh 'mvn clean install -DskipTests'
     }
 }
