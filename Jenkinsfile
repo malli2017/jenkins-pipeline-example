@@ -35,7 +35,7 @@ stage 'Deploy to nexus', {
 //    }
     node {
 // sh 'mvn deploy'\
-        echo 'Deployed! :)'
+        echo 'Deployed!'
     }
 }
 
