@@ -32,6 +32,9 @@ node {
 }
 
 stage 'Deploy to nexus', {
+    timeout(time:5, unit:'DAYS') {
+        input message:'Approve deployment?', submitter: 'it-ops'
+    }
     node {
         sh 'mvn deploy'
     }
